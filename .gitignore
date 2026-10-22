@@ -1,0 +1,21 @@
+# Compilación y artefactos
+target/
+*.class
+
+# Entornos de desarrollo
+.idea/
+*.iml
+*.iws
+*.ipr
+nbproject/private/
+build/
+dist/
+.settings/
+.project
+.classpath
+
+# Logs y temporales
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

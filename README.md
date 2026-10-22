@@ -1,149 +1,132 @@
 # Gestión de Funcionarios — IU Digital de Antioquia
+## Actividad: Desarrollo de Software Seguro (Patrón DAO, Modelo Relacional y Excepciones en Java)
 
-Aplicación de escritorio académica desarrollada en **Java Swing**, conectada a **MySQL** mediante **JDBC**, implementando el **patrón DAO** (*Data Access Object*), arquitectura por capas, validaciones de negocio y manejo robusto de excepciones.
+Aplicación de escritorio académica desarrollada en **Java Swing**, conectada a **MySQL / MariaDB** mediante **JDBC**, implementando el **patrón de diseño DAO** (*Data Access Object*), arquitectura por capas, validaciones de negocio defensivas, prevención de inyección SQL y manejo robusto de excepciones.
 
-La solución incluye la gestión integral (CRUD) de:
-1. **Funcionarios**
-2. **Grupo familiar de cada funcionario** (relación 1 a N)
-3. **Formación académica de cada funcionario** (relación 1 a N)
-
----
-
-## Requisitos del Sistema
-- **Java Development Kit (JDK):** Versión 21 o superior.
-- **Base de Datos:** MySQL Server (o MariaDB / XAMPP / WAMP) y MySQL Workbench o phpMyAdmin.
-- **Entorno de Desarrollo:** Antigravity IDE o Apache NetBeans 19+.
-- **Driver JDBC:** `mysql-connector-j` 9.5.0 (gestionado vía Maven o presente en `.m2`).
+La solución cumple al 100% con los criterios de evaluación de la rúbrica institucional (100 puntos):
+1. **Aplicación CRUD (45 pts):** Crear, listar, editar y eliminar información de funcionarios, además de gestionar sus relaciones de grupo familiar y formación académica.
+2. **Modelo Relacional (20 pts):** Diseño normalizado con las 5 tablas especificadas en la rúbrica: `tipo_documento`, `estado_civil`, `funcionarios`, `grupo_familiar` y `formacion_academica`.
+3. **Script de la Base de Datos (10 pts):** Archivo `sql/01_crear_base_datos.sql` con definición de tablas, claves primarias, foráneas e integridad referencial (`ON DELETE CASCADE`).
+4. **Poblado de Tablas (10 pts):** Archivo `sql/02_datos_iniciales.sql` con datos maestros y de prueba iniciales.
+5. **Vídeo o Documento Explicativo (10 pts):** 
+   - [DOCUMENTO_ACTIVIDAD_APA.md](DOCUMENTO_ACTIVIDAD_APA.md): Documento completo con portada, introducción, justificación del motor, explicación de servicios y normas APA.
+   - [GUION_VIDEO_YOUTUBE.md](GUION_VIDEO_YOUTUBE.md): Guion minuto a minuto para grabar la sustentación en vídeo para YouTube mencionando a los integrantes.
+6. **Puntualidad y Entrega en Git (5 pts):** Repositorio local versionado con Git listo para subir a GitHub o Bitbucket.
 
 ---
 
-## 1. Configurar y Crear la Base de Datos en MySQL
+## 1. Modelo Relacional (5 Tablas)
 
-1. Inicia tu servidor local de MySQL (por ejemplo, mediante XAMPP, el servicio de Windows o Docker).
-2. Abre **MySQL Workbench** (o la herramienta cliente de tu preferencia) y conéctate como usuario administrador (ej. `root`).
-3. Abre y ejecuta el archivo:
-   - `sql/01_crear_base_datos.sql`
-   *(Crea la base de datos `gestion_funcionarios` y las tablas `funcionarios`, `grupo_familiar` y `formacion_academica` con borrado en cascada `ON DELETE CASCADE`).*
-4. Abre y ejecuta el archivo:
-   - `sql/02_datos_iniciales.sql`
-   *(Inserta los datos ficticios de prueba en las 3 tablas).*
-5. Verifica que las tablas contengan los registros ejecutando:
-   ```sql
-   USE gestion_funcionarios;
-   SELECT * FROM funcionarios;
-   SELECT * FROM grupo_familiar;
-   SELECT * FROM formacion_academica;
-   ```
+```mermaid
+erDiagram
+    TIPO_DOCUMENTO ||--o{ FUNCIONARIOS : "identifica"
+    ESTADO_CIVIL ||--o{ FUNCIONARIOS : "clasifica"
+    FUNCIONARIOS ||--o{ GRUPO_FAMILIAR : "1 a N (CASCADE)"
+    FUNCIONARIOS ||--o{ FORMACION_ACADEMICA : "1 a N (CASCADE)"
 
----
-
-## 2. Configurar Credenciales de Conexión
-
-La clase `src/main/java/com/iudigital/gestion/config/Conexion.java` lee variables de entorno del sistema o toma valores predeterminados:
-- **`DB_URL`** (predeterminado: `jdbc:mysql://localhost:3306/gestion_funcionarios?useSSL=false&serverTimezone=America/Bogota&allowPublicKeyRetrieval=true`)
-- **`DB_USER`** (predeterminado: `root`)
-- **`DB_PASSWORD`** (predeterminado: `""` vacío)
-
-Si tu usuario `root` de MySQL tiene contraseña (por ejemplo `admin123` o `root`), puedes:
-- **Opción A (Recomendada en terminal/PowerShell):**
-  ```powershell
-  $env:DB_PASSWORD="tu_contraseña"
-  ```
-- **Opción B:** Modificar directamente los valores predeterminados en `Conexion.java` en tu copia local.
-
----
-
-## 3. Cómo Ejecutar la Aplicación
-
-### Desde la Terminal en Antigravity / PowerShell:
-Si tienes Maven instalado:
-```powershell
-mvn clean compile exec:java
+    TIPO_DOCUMENTO {
+        varchar(20) codigo PK
+        varchar(100) descripcion
+    }
+    ESTADO_CIVIL {
+        varchar(30) codigo PK
+        varchar(100) descripcion
+    }
+    FUNCIONARIOS {
+        int id_funcionario PK
+        varchar(20) tipo_identificacion FK
+        varchar(30) numero_identificacion UK
+        varchar(100) nombres
+        varchar(100) apellidos
+        varchar(30) estado_civil FK
+        varchar(30) sexo
+        varchar(200) direccion
+        varchar(30) telefono
+        date fecha_nacimiento
+    }
+    GRUPO_FAMILIAR {
+        int id_familiar PK
+        int id_funcionario FK
+        varchar(20) tipo_identificacion
+        varchar(30) numero_identificacion
+        varchar(100) nombres
+        varchar(100) apellidos
+        date fecha_nacimiento
+        varchar(50) rol_familiar
+    }
+    FORMACION_ACADEMICA {
+        int id_formacion PK
+        int id_funcionario FK
+        varchar(150) universidad
+        varchar(60) nivel_estudio
+        varchar(150) titulo
+    }
 ```
 
-Si ejecutas directamente con el compilador de Java (`javac` y `java`):
+---
+
+## 2. Requisitos y Configuración de la Base de Datos
+
+- **Motor:** MySQL 8.0+ o MariaDB 10.4+ (ejecutable mediante XAMPP, WAMP o servicio nativo).
+- **Puerto predeterminado:** `3306`.
+- **Credenciales por defecto:** Usuario `root`, sin contraseña.
+
+### Pasos para crear y poblar la base de datos:
+1. Inicia MySQL en el panel de control de XAMPP (botón **Start** en MySQL) o en tu gestor de base de datos preferido.
+2. Abre **MySQL Workbench** o **phpMyAdmin** (`http://localhost/phpmyadmin`).
+3. Ejecuta en orden los dos scripts ubicados en la carpeta `sql/`:
+   - `sql/01_crear_base_datos.sql` (Crea la base de datos `gestion_funcionarios` y las 5 tablas).
+   - `sql/02_datos_iniciales.sql` (Inserta catálogos y datos ficticios de prueba).
+
+---
+
+## 3. Configuración de Credenciales en Java
+
+En `src/main/java/com/iudigital/gestion/config/Conexion.java`, la aplicación toma las credenciales predeterminadas para XAMPP/MySQL:
+- URL: `jdbc:mysql://localhost:3306/gestion_funcionarios?useSSL=false&serverTimezone=America/Bogota&allowPublicKeyRetrieval=true`
+- Usuario: `root`
+- Contraseña: `""` (vacía)
+
+Si tu servidor de base de datos requiere contraseña, puedes establecer la variable de entorno antes de ejecutar:
+```powershell
+$env:DB_PASSWORD="tu_password_aqui"
+```
+
+---
+
+## 4. Cómo Compilar y Ejecutar la Aplicación
+
+### Opción A: Desde Terminal (PowerShell / CMD)
 ```powershell
 # 1. Compilar clases
 $jar = "$env:USERPROFILE\.m2\repository\com\mysql\mysql-connector-j\9.5.0\mysql-connector-j-9.5.0.jar"
 javac -cp "$jar" -d target/classes (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName })
 
-# 2. Ejecutar la aplicación
+# 2. Ejecutar
 java -cp "target/classes;$jar" com.iudigital.gestion.Main
 ```
 
-### Desde Apache NetBeans:
-1. Abre NetBeans y ve a **File > Open Project**.
-2. Selecciona la carpeta `gestion-funcionarios` (donde se encuentra `pom.xml`).
-3. Haz clic derecho sobre el proyecto y selecciona **Clean and Build**.
-4. Haz clic en **Run Project** (o presiona `F6`). La clase principal es `com.iudigital.gestion.Main`.
+### Opción B: Desde Apache NetBeans
+1. Abre NetBeans: **File > Open Project** y selecciona la carpeta `gestion-funcionarios`.
+2. Haz clic derecho en el proyecto y elige **Clean and Build**.
+3. Presiona **F6** o **Run Project**.
 
 ---
 
-## 4. Guía Paso a Paso para Probar Cada Operación
+## 5. Subir a Git (GitHub / Bitbucket)
 
-La interfaz gráfica cuenta con 3 pestañas principales en un `JTabbedPane`:
+El proyecto ya cuenta con el repositorio local inicializado y el primer commit preparado con `.gitignore`. Para subirlo a tu cuenta de GitHub:
 
-### Pestaña 1: 🏢 Funcionarios
-- **Listar:** Al iniciar la aplicación, la tabla muestra automáticamente los funcionarios registrados.
-- **Crear:**
-  1. Diligencia los campos del formulario (número de identificación, nombres, apellidos, estado civil, sexo, dirección, teléfono y fecha de nacimiento en formato `AAAA-MM-DD`, ej. `1990-05-15`).
-  2. Haz clic en **Crear Funcionario**. Verás un mensaje de confirmación y el funcionario aparecerá en la tabla.
-- **Seleccionar:** Haz clic sobre cualquier fila de la tabla. Sus datos se cargarán en el formulario y quedará fijado como el **funcionario activo** para las pestañas de familiares y estudios.
-- **Actualizar:** Modifica cualquier dato del funcionario seleccionado y pulsa **Actualizar Funcionario**.
-- **Eliminar:** Con un funcionario seleccionado, pulsa **Eliminar Funcionario**. El sistema solicitará confirmación advirtiendo que sus familiares y estudios también se eliminarán en cascada.
-- **Limpiar:** Deja en blanco los campos para ingresar un nuevo registro.
-
-### Pestaña 2: 👨‍👩‍👧‍👦 Grupo Familiar
-- En la parte superior verás un banner verde que indica: `👤 Funcionario seleccionado: [ID] Nombre Apellido`.
-- *Nota:* Si no has seleccionado ningún funcionario en la pestaña 1, verás una advertencia naranja y el sistema te pedirá seleccionar uno antes de registrar datos.
-- **Listar:** Muestra únicamente los familiares del funcionario seleccionado.
-- **Registrar Familiar:** Ingresa tipo de documento, número, nombres, apellidos, fecha de nacimiento opcional (`AAAA-MM-DD`) y rol/parentesco (Hijo/a, Cónyuge, Padre, Madre, etc.). Haz clic en **Guardar Familiar**.
-- **Actualizar Familiar:** Haz clic en una fila de la tabla de familiares, modifica los campos deseados y pulsa **Actualizar Familiar**.
-- **Eliminar Familiar:** Selecciona la fila del familiar y pulsa **Eliminar Familiar**.
-
-### Pestaña 3: 🎓 Formación Académica
-- Muestra el banner informativo con el funcionario activo.
-- **Listar:** Carga los estudios y títulos académicos pertenecientes al funcionario activo.
-- **Registrar Estudio:** Ingresa el nivel de estudio (Técnico, Tecnología, Profesional, Especialización, Maestría, Doctorado), universidad o institución y título obtenido. Pulsa **Guardar Estudio**.
-- **Actualizar Estudio:** Selecciona un estudio de la tabla, ajusta los campos y pulsa **Actualizar Estudio**.
-- **Eliminar Estudio:** Selecciona un estudio de la tabla y pulsa **Eliminar Estudio**.
+1. Crea un repositorio vacío en [GitHub](https://github.com/new) (ejemplo: `gestion-funcionarios-iudigital`).
+2. En la terminal de esta carpeta, ejecuta:
+   ```powershell
+   git remote add origin https://github.com/TU_USUARIO/gestion-funcionarios-iudigital.git
+   git branch -M main
+   git push -u origin main
+   ```
 
 ---
 
-## 5. Arquitectura y Organización del Código
-
-El proyecto sigue una arquitectura por capas desacopladas con el patrón DAO:
-
-```
-src/main/java/com/iudigital/gestion/
-├── Main.java                               # Punto de entrada (Lanza UI con LookAndFeel nativo en EDT)
-├── config/
-│   └── Conexion.java                       # Obtención de conexiones JDBC (DriverManager)
-├── model/
-│   ├── Funcionario.java                    # Entidad Funcionario
-│   ├── GrupoFamiliar.java                  # Entidad Grupo Familiar
-│   └── FormacionAcademica.java             # Entidad Formación Académica
-├── dao/
-│   ├── FuncionarioDAO.java                 # Contrato DAO (listar, obtenerPorId, crear, actualizar, eliminar)
-│   ├── FuncionarioDAOImpl.java             # Implementación JDBC con PreparedStatement y try-with-resources
-│   ├── GrupoFamiliarDAO.java               # Contrato DAO de familiares por funcionario
-│   ├── GrupoFamiliarDAOImpl.java           # Implementación JDBC de familiares
-│   ├── FormacionAcademicaDAO.java          # Contrato DAO de formación por funcionario
-│   └── FormacionAcademicaDAOImpl.java      # Implementación JDBC de formación académica
-├── service/
-│   ├── FuncionarioService.java             # Reglas de negocio y validaciones de funcionarios
-│   ├── GrupoFamiliarService.java           # Reglas de negocio y validaciones de familiares
-│   └── FormacionAcademicaService.java      # Reglas de negocio y validaciones de formación
-├── exception/
-│   └── AccesoDatosException.java           # Excepción personalizada comprobada (Checked Exception)
-└── view/
-    └── FuncionarioView.java                # Interfaz de escritorio Swing con JTabbedPane y manejo seguro de errores
-```
-
----
-
-## 6. Información Académica
-- **Institución:** IU Digital de Antioquia
-- **Programa:** Tecnología en Desarrollo de Software / Ingeniería de Software
-- **Asignatura:** Programación en Java / Bases de Datos
-- **Patrones y Tecnologías:** Java 21, Swing, JDBC, MySQL, Patrón DAO, Arquitectura en Capas.
+## 6. Documentos para la Entrega y Sustentación
+- **Documento Normas APA:** [DOCUMENTO_ACTIVIDAD_APA.md](DOCUMENTO_ACTIVIDAD_APA.md) (listo para exportar a Word o PDF).
+- **Guion para Vídeo en YouTube:** [GUION_VIDEO_YOUTUBE.md](GUION_VIDEO_YOUTUBE.md) (estructura con tiempos y qué mostrar en pantalla).

@@ -1,0 +1,48 @@
+erDiagram
+    tipo_documento ||--o{ funcionarios : "fk_funcionario_tipo_doc"
+    estado_civil ||--o{ funcionarios : "fk_funcionario_estado_civil"
+    funcionarios ||--o{ grupo_familiar : "fk_familiar_funcionario"
+    tipo_documento ||--o{ grupo_familiar : "fk_familiar_tipo_doc"
+    funcionarios ||--o{ formacion_academica : "fk_formacion_funcionario"
+
+    tipo_documento {
+        varchar(20) codigo PK "Código o sigla del documento"
+        varchar(100) descripcion "Descripción del tipo de documento"
+    }
+
+    estado_civil {
+        varchar(30) codigo PK "Nombre del estado civil"
+        varchar(100) descripcion "Descripción del estado civil"
+    }
+
+    funcionarios {
+        int id_funcionario PK "Identificador único auto-incremental"
+        varchar(20) tipo_identificacion FK "Referencia a tipo_documento.codigo"
+        varchar(30) numero_identificacion UK "Número de documento único"
+        varchar(100) nombres "Nombres del funcionario"
+        varchar(100) apellidos "Apellidos del funcionario"
+        varchar(30) estado_civil FK "Referencia a estado_civil.codigo"
+        varchar(30) sexo "Sexo del funcionario"
+        varchar(200) direccion "Dirección de residencia"
+        varchar(30) telefono "Teléfono de contacto"
+        date fecha_nacimiento "Fecha de nacimiento"
+    }
+
+    grupo_familiar {
+        int id_familiar PK "Identificador único auto-incremental"
+        int id_funcionario FK "Referencia a funcionarios.id_funcionario (CASCADE)"
+        varchar(20) tipo_identificacion FK "Referencia a tipo_documento.codigo (SET NULL)"
+        varchar(30) numero_identificacion "Número de documento del familiar"
+        varchar(100) nombres "Nombres del familiar"
+        varchar(100) apellidos "Apellidos del familiar"
+        date fecha_nacimiento "Fecha de nacimiento del familiar"
+        varchar(50) rol_familiar "Parentesco o rol familiar"
+    }
+
+    formacion_academica {
+        int id_formacion PK "Identificador único auto-incremental"
+        int id_funcionario FK "Referencia a funcionarios.id_funcionario (CASCADE)"
+        varchar(150) universidad "Universidad o institución educativa"
+        varchar(60) nivel_estudio "Nivel de estudio realizado"
+        varchar(150) titulo "Título o certificado obtenido"
+    }

@@ -1,0 +1,170 @@
+<mxfile host="app.diagrams.net" modified="2026-10-23T22:00:00.000Z" agent="Antigravity" version="21.0.0" type="device">
+  <diagram id="modelo_relacional_iudigital" name="Modelo Relacional - Gestión Funcionarios">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Titulo del Diagrama -->
+        <mxCell id="title" value="MODELO RELACIONAL — SISTEMA DE GESTIÓN DE FUNCIONARIOS (IU DIGITAL)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1f4e79;" vertex="1" parent="1">
+          <mxGeometry x="100" y="15" width="960" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- TABLA: tipo_documento                          -->
+        <!-- ============================================== -->
+        <mxCell id="tbl_tipo_doc" value="tipo_documento" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#1f4e79;strokeColor=#13324d;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="230" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="td_col1" value="PK  codigo : VARCHAR(20)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=1;fontColor=#0d233a;" vertex="1" parent="tbl_tipo_doc">
+          <mxGeometry y="28" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="td_col2" value="      descripcion : VARCHAR(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_tipo_doc">
+          <mxGeometry y="58" width="230" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- TABLA: estado_civil                            -->
+        <!-- ============================================== -->
+        <mxCell id="tbl_estado_civil" value="estado_civil" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#1f4e79;strokeColor=#13324d;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="50" y="240" width="230" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_col1" value="PK  codigo : VARCHAR(30)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=1;fontColor=#0d233a;" vertex="1" parent="tbl_estado_civil">
+          <mxGeometry y="28" width="230" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ec_col2" value="      descripcion : VARCHAR(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_estado_civil">
+          <mxGeometry y="58" width="230" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- TABLA: funcionarios                            -->
+        <!-- ============================================== -->
+        <mxCell id="tbl_funcionarios" value="funcionarios" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#005a9e;strokeColor=#003d6b;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="380" y="70" width="280" height="328" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col1" value="PK  id_funcionario : INT (AUTO_INC)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=1;fontColor=#0d233a;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="28" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col2" value="FK  tipo_identificacion : VARCHAR(20)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=2;fontColor=#004085;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="58" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col3" value="UQ  numero_identificacion : VARCHAR(30)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=1;fontColor=#222222;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="88" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col4" value="      nombres : VARCHAR(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="118" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col5" value="      apellidos : VARCHAR(100)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="148" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col6" value="FK  estado_civil : VARCHAR(30)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=2;fontColor=#004085;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="178" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col7" value="      sexo : VARCHAR(30)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="208" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col8" value="      direccion : VARCHAR(200)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="238" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col9" value="      telefono : VARCHAR(30)" style="text;strokeColor=none;fillColor=#eef4fa;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="268" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="func_col10" value="      fecha_nacimiento : DATE" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_funcionarios">
+          <mxGeometry y="298" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- TABLA: grupo_familiar                          -->
+        <!-- ============================================== -->
+        <mxCell id="tbl_grupo_familiar" value="grupo_familiar" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#2e7d32;strokeColor=#1b5e20;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="780" y="70" width="290" height="268" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col1" value="PK  id_familiar : INT (AUTO_INC)" style="text;strokeColor=none;fillColor=#f1f8e9;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=1;fontColor=#1b5e20;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="28" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col2" value="FK  id_funcionario : INT" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=2;fontColor=#004085;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="58" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col3" value="FK  tipo_identificacion : VARCHAR(20)" style="text;strokeColor=none;fillColor=#f1f8e9;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=2;fontColor=#004085;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="88" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col4" value="      numero_identificacion : VARCHAR(30)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="118" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col5" value="      nombres : VARCHAR(100)" style="text;strokeColor=none;fillColor=#f1f8e9;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="148" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col6" value="      apellidos : VARCHAR(100)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="178" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col7" value="      fecha_nacimiento : DATE" style="text;strokeColor=none;fillColor=#f1f8e9;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="208" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="fam_col8" value="      rol_familiar : VARCHAR(50)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_grupo_familiar">
+          <mxGeometry y="238" width="290" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- TABLA: formacion_academica                     -->
+        <!-- ============================================== -->
+        <mxCell id="tbl_formacion" value="formacion_academica" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#6a1b9a;strokeColor=#4a148c;fontColor=#ffffff;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="780" y="380" width="290" height="178" as="geometry" />
+        </mxCell>
+        <mxCell id="form_col1" value="PK  id_formacion : INT (AUTO_INC)" style="text;strokeColor=none;fillColor=#f3e5f5;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=1;fontColor=#4a148c;" vertex="1" parent="tbl_formacion">
+          <mxGeometry y="28" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="form_col2" value="FK  id_funcionario : INT" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontStyle=2;fontColor=#004085;" vertex="1" parent="tbl_formacion">
+          <mxGeometry y="58" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="form_col3" value="      universidad : VARCHAR(150)" style="text;strokeColor=none;fillColor=#f3e5f5;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_formacion">
+          <mxGeometry y="88" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="form_col4" value="      nivel_estudio : VARCHAR(60)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_formacion">
+          <mxGeometry y="118" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="form_col5" value="      titulo : VARCHAR(150)" style="text;strokeColor=none;fillColor=#f3e5f5;align=left;verticalAlign=middle;spacingLeft=6;fontSize=11;fontColor=#333333;" vertex="1" parent="tbl_formacion">
+          <mxGeometry y="148" width="290" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- RELACIONES / FOREIGN KEYS                      -->
+        <!-- ============================================== -->
+        <!-- 1. tipo_documento -> funcionarios -->
+        <mxCell id="edge_tipo_doc_func" value="1 : N&#xa;fk_funcionario_tipo_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1f4e79;strokeWidth=2;fontSize=10;fontColor=#1f4e79;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="td_col1" target="func_col2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 2. estado_civil -> funcionarios -->
+        <mxCell id="edge_estado_civil_func" value="1 : N&#xa;fk_funcionario_estado_civil" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#1f4e79;strokeWidth=2;fontSize=10;fontColor=#1f4e79;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="ec_col1" target="func_col6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 3. funcionarios -> grupo_familiar -->
+        <mxCell id="edge_func_familiar" value="1 : N (CASCADE)&#xa;fk_familiar_funcionario" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#2e7d32;strokeWidth=2;fontSize=10;fontColor=#2e7d32;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="func_col1" target="fam_col2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 4. tipo_documento -> grupo_familiar -->
+        <mxCell id="edge_tipo_doc_familiar" value="1 : N (SET NULL)&#xa;fk_familiar_tipo_doc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#555555;strokeWidth=1.5;strokeFactor=1;dashed=1;fontSize=10;fontColor=#444444;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="tbl_tipo_doc" target="tbl_grupo_familiar">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="165" y="45" />
+              <mxPoint x="925" y="45" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 5. funcionarios -> formacion_academica -->
+        <mxCell id="edge_func_formacion" value="1 : N (CASCADE)&#xa;fk_formacion_funcionario" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#6a1b9a;strokeWidth=2;fontSize=10;fontColor=#6a1b9a;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="func_col1" target="form_col2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="113" />
+              <mxPoint x="720" y="453" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

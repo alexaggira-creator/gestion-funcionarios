@@ -4,7 +4,7 @@ Aplicación de escritorio desarrollada en **Java Swing** y conectada a **MySQL /
 
 ---
 
-## 🚀 Características Principales
+## Características Principales
 
 - **Gestión Completa de Funcionarios (CRUD):** Registro, consulta detallada, actualización y eliminación de funcionarios.
 - **Relaciones Familiares y Académicas:** Administración de grupo familiar y formación académica asociados a cada funcionario con integridad referencial (`ON DELETE CASCADE`).
@@ -14,7 +14,7 @@ Aplicación de escritorio desarrollada en **Java Swing** y conectada a **MySQL /
 
 ---
 
-## 🏛️ Arquitectura del Proyecto
+## Arquitectura del Proyecto
 
 ```
 gestion-funcionarios/
@@ -39,7 +39,7 @@ gestion-funcionarios/
 
 ---
 
-## 🗄️ Modelo Relacional
+## Modelo Relacional
 
 El sistema implementa 5 tablas normalizadas con claves primarias y foráneas que garantizan la integridad de los datos:
 
@@ -93,7 +93,7 @@ erDiagram
 
 ---
 
-## ⚙️ Requisitos Previos
+## Requisitos Previos
 
 - **Java JDK:** Versión 17 o 21+.
 - **Gestor de Base de Datos:** MySQL 8.0+ o MariaDB 10.4+ (ej. a través de XAMPP, WAMP o Docker).
@@ -101,7 +101,7 @@ erDiagram
 
 ---
 
-## 🛠️ Configuración de la Base de Datos
+## Configuración de la Base de Datos
 
 1. Inicia el servicio de MySQL (por ejemplo, desde el panel de **XAMPP**).
 2. Abre tu gestor de base de datos preferido (phpMyAdmin, MySQL Workbench, DBeaver o consola).
@@ -123,7 +123,7 @@ $env:DB_PASSWORD="tu_password"
 
 ---
 
-## 💻 Compilación y Ejecución
+## Compilación y Ejecución
 
 ### Opción 1: Con Apache Maven (Recomendada)
 
@@ -145,7 +145,7 @@ mvn exec:java
 
 ---
 
-## 📦 Control de Versiones
+## Control de Versiones
 
 Repositorio oficial en GitHub:
 [https://github.com/alexaggira-creator/gestion-funcionarios.git](https://github.com/alexaggira-creator/gestion-funcionarios.git)

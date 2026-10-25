@@ -1,21 +1,47 @@
 # Gestión de Funcionarios — IU Digital de Antioquia
-## Actividad: Desarrollo de Software Seguro (Patrón DAO, Modelo Relacional y Excepciones en Java)
 
-Aplicación de escritorio académica desarrollada en **Java Swing**, conectada a **MySQL / MariaDB** mediante **JDBC**, implementando el **patrón de diseño DAO** (*Data Access Object*), arquitectura por capas, validaciones de negocio defensivas, prevención de inyección SQL y manejo robusto de excepciones.
-
-La solución cumple al 100% con los criterios de evaluación de la rúbrica institucional (100 puntos):
-1. **Aplicación CRUD (45 pts):** Crear, listar, editar y eliminar información de funcionarios, además de gestionar sus relaciones de grupo familiar y formación académica.
-2. **Modelo Relacional (20 pts):** Diseño normalizado con las 5 tablas especificadas en la rúbrica: `tipo_documento`, `estado_civil`, `funcionarios`, `grupo_familiar` y `formacion_academica`.
-3. **Script de la Base de Datos (10 pts):** Archivo `sql/01_crear_base_datos.sql` con definición de tablas, claves primarias, foráneas e integridad referencial (`ON DELETE CASCADE`).
-4. **Poblado de Tablas (10 pts):** Archivo `sql/02_datos_iniciales.sql` con datos maestros y de prueba iniciales.
-5. **Vídeo o Documento Explicativo (10 pts):** 
-   - [DOCUMENTO_ACTIVIDAD_APA.md](DOCUMENTO_ACTIVIDAD_APA.md): Documento completo con portada, introducción, justificación del motor, explicación de servicios y normas APA.
-   - [GUION_VIDEO_YOUTUBE.md](GUION_VIDEO_YOUTUBE.md): Guion minuto a minuto para grabar la sustentación en vídeo para YouTube mencionando a los integrantes.
-6. **Puntualidad y Entrega en Git (5 pts):** Repositorio local versionado con Git listo para subir a GitHub o Bitbucket.
+Aplicación de escritorio desarrollada en **Java Swing** y conectada a **MySQL / MariaDB** mediante **JDBC**, implementando el **patrón de diseño DAO** (*Data Access Object*), arquitectura por capas, validaciones de negocio defensivas, prevención de inyección SQL mediante consultas preparadas (`PreparedStatement`) y manejo de excepciones personalizadas.
 
 ---
 
-## 1. Modelo Relacional (5 Tablas)
+## 🚀 Características Principales
+
+- **Gestión Completa de Funcionarios (CRUD):** Registro, consulta detallada, actualización y eliminación de funcionarios.
+- **Relaciones Familiares y Académicas:** Administración de grupo familiar y formación académica asociados a cada funcionario con integridad referencial (`ON DELETE CASCADE`).
+- **Arquitectura Limpia y Modular:** Separación estricta de responsabilidades en capas (Vista, Servicio/Negocio, DAO, Modelo, Excepciones y Configuración).
+- **Seguridad en Acceso a Datos:** Uso exhaustivo de consultas parametrizadas para evitar ataques de inyección SQL y manejo seguro del ciclo de vida de conexiones y recursos JDBC.
+- **Interfaz Gráfica Intuitiva:** Vistas construidas en Java Swing con formularios guiados, tablas dinámicas y diálogos de confirmación y alerta.
+
+---
+
+## 🏛️ Arquitectura del Proyecto
+
+```
+gestion-funcionarios/
+├── documentacion/          # Documentación técnica y diagramas del modelo relacional
+│   ├── MODELO_RELACIONAL.md
+│   ├── modelo_relacional.drawio
+│   ├── modelo_relacional.mmd
+│   └── modelo_relacional.png
+├── sql/                    # Scripts de inicialización de la base de datos
+│   ├── 01_crear_base_datos.sql
+│   └── 02_datos_iniciales.sql
+├── src/main/java/com/iudigital/gestion/
+│   ├── config/             # Conexión a la base de datos (JDBC Singleton / Factory)
+│   ├── dao/                # Interfaces e implementaciones del patrón DAO
+│   ├── exception/          # Excepciones personalizadas del dominio
+│   ├── model/              # Clases de entidad (DTOs / POJOs)
+│   ├── service/            # Lógica de negocio y validaciones
+│   ├── view/               # Interfaz gráfica de usuario en Swing
+│   └── Main.java           # Punto de entrada de la aplicación
+└── pom.xml                 # Configuración de dependencias y plugins Maven
+```
+
+---
+
+## 🗄️ Modelo Relacional
+
+El sistema implementa 5 tablas normalizadas con claves primarias y foráneas que garantizan la integridad de los datos:
 
 ```mermaid
 erDiagram
@@ -63,70 +89,63 @@ erDiagram
     }
 ```
 
----
-
-## 2. Requisitos y Configuración de la Base de Datos
-
-- **Motor:** MySQL 8.0+ o MariaDB 10.4+ (ejecutable mediante XAMPP, WAMP o servicio nativo).
-- **Puerto predeterminado:** `3306`.
-- **Credenciales por defecto:** Usuario `root`, sin contraseña.
-
-### Pasos para crear y poblar la base de datos:
-1. Inicia MySQL en el panel de control de XAMPP (botón **Start** en MySQL) o en tu gestor de base de datos preferido.
-2. Abre **MySQL Workbench** o **phpMyAdmin** (`http://localhost/phpmyadmin`).
-3. Ejecuta en orden los dos scripts ubicados en la carpeta `sql/`:
-   - `sql/01_crear_base_datos.sql` (Crea la base de datos `gestion_funcionarios` y las 5 tablas).
-   - `sql/02_datos_iniciales.sql` (Inserta catálogos y datos ficticios de prueba).
+> Para más detalles técnicos y definiciones de campos, consulta [`documentacion/MODELO_RELACIONAL.md`](documentacion/MODELO_RELACIONAL.md).
 
 ---
 
-## 3. Configuración de Credenciales en Java
+## ⚙️ Requisitos Previos
 
-En `src/main/java/com/iudigital/gestion/config/Conexion.java`, la aplicación toma las credenciales predeterminadas para XAMPP/MySQL:
-- URL: `jdbc:mysql://localhost:3306/gestion_funcionarios?useSSL=false&serverTimezone=America/Bogota&allowPublicKeyRetrieval=true`
-- Usuario: `root`
-- Contraseña: `""` (vacía)
+- **Java JDK:** Versión 17 o 21+.
+- **Gestor de Base de Datos:** MySQL 8.0+ o MariaDB 10.4+ (ej. a través de XAMPP, WAMP o Docker).
+- **Herramienta de Construcción:** Apache Maven 3.8+ o un IDE compatible (Apache NetBeans, IntelliJ IDEA, Eclipse, VS Code).
 
-Si tu servidor de base de datos requiere contraseña, puedes establecer la variable de entorno antes de ejecutar:
+---
+
+## 🛠️ Configuración de la Base de Datos
+
+1. Inicia el servicio de MySQL (por ejemplo, desde el panel de **XAMPP**).
+2. Abre tu gestor de base de datos preferido (phpMyAdmin, MySQL Workbench, DBeaver o consola).
+3. Ejecuta en orden los scripts ubicados en la carpeta `sql/`:
+   1. [`sql/01_crear_base_datos.sql`](sql/01_crear_base_datos.sql): Crea la base de datos `gestion_funcionarios` y las tablas con sus relaciones.
+   2. [`sql/02_datos_iniciales.sql`](sql/02_datos_iniciales.sql): Inserta los catálogos base (`tipo_documento`, `estado_civil`) y registros de prueba.
+
+### Parámetros de Conexión
+La clase `Conexion.java` (`src/main/java/com/iudigital/gestion/config/Conexion.java`) utiliza por defecto:
+- **Host / Puerto:** `localhost:3306`
+- **Base de Datos:** `gestion_funcionarios`
+- **Usuario:** `root`
+- **Contraseña:** `""` *(vacía por defecto para XAMPP)*
+
+Si tu motor requiere contraseña o parámetros diferentes, puedes establecer la variable de entorno:
 ```powershell
-$env:DB_PASSWORD="tu_password_aqui"
+$env:DB_PASSWORD="tu_password"
 ```
 
 ---
 
-## 4. Cómo Compilar y Ejecutar la Aplicación
+## 💻 Compilación y Ejecución
 
-### Opción A: Desde Terminal (PowerShell / CMD)
+### Opción 1: Con Apache Maven (Recomendada)
+
+Desde la terminal en la raíz del proyecto (`gestion-funcionarios`):
+
 ```powershell
-# 1. Compilar clases
-$jar = "$env:USERPROFILE\.m2\repository\com\mysql\mysql-connector-j\9.5.0\mysql-connector-j-9.5.0.jar"
-javac -cp "$jar" -d target/classes (Get-ChildItem -Recurse -Filter *.java src | ForEach-Object { $_.FullName })
+# Compilar el proyecto
+mvn clean compile
 
-# 2. Ejecutar
-java -cp "target/classes;$jar" com.iudigital.gestion.Main
+# Ejecutar la aplicación
+mvn exec:java
 ```
 
-### Opción B: Desde Apache NetBeans
-1. Abre NetBeans: **File > Open Project** y selecciona la carpeta `gestion-funcionarios`.
-2. Haz clic derecho en el proyecto y elige **Clean and Build**.
-3. Presiona **F6** o **Run Project**.
+### Opción 2: Desde Apache NetBeans
+
+1. Ve a **File > Open Project** y selecciona la carpeta del proyecto.
+2. Haz clic derecho sobre el proyecto y selecciona **Clean and Build**.
+3. Presiona **F6** o haz clic en **Run Project**.
 
 ---
 
-## 5. Subir a Git (GitHub / Bitbucket)
+## 📦 Control de Versiones
 
-El proyecto ya cuenta con el repositorio local inicializado y el primer commit preparado con `.gitignore`. Para subirlo a tu cuenta de GitHub:
-
-1. Crea un repositorio vacío en [GitHub](https://github.com/new) (ejemplo: `gestion-funcionarios-iudigital`).
-2. En la terminal de esta carpeta, ejecuta:
-   ```powershell
-   git remote add origin https://github.com/TU_USUARIO/gestion-funcionarios-iudigital.git
-   git branch -M main
-   git push -u origin main
-   ```
-
----
-
-## 6. Documentos para la Entrega y Sustentación
-- **Documento Normas APA:** [DOCUMENTO_ACTIVIDAD_APA.md](DOCUMENTO_ACTIVIDAD_APA.md) (listo para exportar a Word o PDF).
-- **Guion para Vídeo en YouTube:** [GUION_VIDEO_YOUTUBE.md](GUION_VIDEO_YOUTUBE.md) (estructura con tiempos y qué mostrar en pantalla).
+Repositorio oficial en GitHub:
+[https://github.com/alexaggira-creator/gestion-funcionarios.git](https://github.com/alexaggira-creator/gestion-funcionarios.git)
